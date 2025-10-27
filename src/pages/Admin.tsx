@@ -65,10 +65,10 @@ export default function Admin() {
     setIsAuthLoading(true);
 
     try {
-      const response = await fetch('https://functions.poehali.dev/133f03e1-973d-44e0-b151-f0c19cae7e33', {
+      const response = await fetch('https://functions.poehali.dev/f1b7ce7b-2c2f-4c89-a900-04a965ca2175', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password })
+        body: JSON.stringify({ action: 'verify', password })
       });
 
       const data = await response.json();

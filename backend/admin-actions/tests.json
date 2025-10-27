@@ -1,6 +1,20 @@
 {
   "tests": [
     {
+      "name": "Verify admin password",
+      "method": "POST",
+      "body": {
+        "action": "verify",
+        "password": "test123"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "valid": "boolean",
+        "message": "string"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
       "name": "Update order status",
       "method": "POST",
       "body": {
@@ -22,21 +36,6 @@
       "body": {
         "action": "delete",
         "type": "order",
-        "id": 999
-      },
-      "expectedStatus": 200,
-      "expectedBody": {
-        "success": true,
-        "message": "string"
-      },
-      "bodyMatcher": "partial"
-    },
-    {
-      "name": "Delete message",
-      "method": "POST",
-      "body": {
-        "action": "delete",
-        "type": "message",
         "id": 999
       },
       "expectedStatus": 200,

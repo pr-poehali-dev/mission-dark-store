@@ -5,8 +5,8 @@ from typing import Dict, Any
 
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     '''
-    Business: Handle admin actions - update status, delete orders and messages
-    Args: event - dict with httpMethod, body (action, type, id, status)
+    Business: Handle admin operations - verify password, update status, delete orders and messages
+    Args: event - dict with httpMethod, body (action: verify/update_status/delete, password, type, id, status)
           context - object with attributes: request_id, function_name
     Returns: HTTP response dict
     '''
@@ -38,10 +38,54 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     
     body_data = json.loads(event.get('body', '{}'))
     action = body_data.get('action')
+    
+    if not action:
+        return {
+            'statusCode': 400,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            'body': json.dumps({'error': 'Missing action'}),
+            'isBase64Encoded': False
+        }
+    
+    # Handle verify action
+    if action == 'verify':
+        password = body_data.get('password')
+        admin_password = os.environ.get('ADMIN_PASSWORD')
+        
+        if not admin_password:
+            return {
+                'statusCode': 500,
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                'body': json.dumps({'error': 'Admin password not configured'}),
+                'isBase64Encoded': False
+            }
+        
+        is_valid = password == admin_password
+        
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            'body': json.dumps({
+                'valid': is_valid,
+                'message': 'Password verified' if is_valid else 'Invalid password'
+            }),
+            'isBase64Encoded': False
+        }
+    
+    # Handle delete and update_status actions
     item_type = body_data.get('type')
     item_id = body_data.get('id')
     
-    if not all([action, item_type, item_id]):
+    if not all([item_type, item_id]):
         return {
             'statusCode': 400,
             'headers': {
