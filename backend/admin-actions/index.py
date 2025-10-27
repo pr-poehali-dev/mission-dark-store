@@ -1,14 +1,12 @@
 import json
 import os
 import psycopg2
-import smtplib
-from email.mime.text import MIMEText
 from typing import Dict, Any
 
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     '''
-    Business: Process customer orders and save to database
-    Args: event - dict with httpMethod, body, queryStringParameters
+    Business: Handle admin actions - update status, delete orders and messages
+    Args: event - dict with httpMethod, body (action, type, id, status)
           context - object with attributes: request_id, function_name
     Returns: HTTP response dict
     '''
@@ -39,14 +37,11 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         }
     
     body_data = json.loads(event.get('body', '{}'))
-    name = body_data.get('name')
-    phone = body_data.get('phone')
-    email = body_data.get('email', '')
-    address = body_data.get('address')
-    items = body_data.get('items', [])
-    total = body_data.get('total', 0)
+    action = body_data.get('action')
+    item_type = body_data.get('type')
+    item_id = body_data.get('id')
     
-    if not all([name, phone, address, items]):
+    if not all([action, item_type, item_id]):
         return {
             'statusCode': 400,
             'headers': {
@@ -61,40 +56,51 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     conn = psycopg2.connect(database_url)
     cursor = conn.cursor()
     
-    cursor.execute(
-        "INSERT INTO orders (name, phone, email, address, items, total) VALUES (%s, %s, %s, %s, %s, %s) RETURNING id",
-        (name, phone, email, address, json.dumps(items), total)
-    )
-    order_id = cursor.fetchone()[0]
+    if action == 'delete':
+        if item_type == 'order':
+            cursor.execute("DELETE FROM orders WHERE id = %s", (item_id,))
+        elif item_type == 'message':
+            cursor.execute("DELETE FROM contact_messages WHERE id = %s", (item_id,))
+        else:
+            conn.close()
+            return {
+                'statusCode': 400,
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                'body': json.dumps({'error': 'Invalid type'}),
+                'isBase64Encoded': False
+            }
+    elif action == 'update_status':
+        status = body_data.get('status')
+        if not status:
+            conn.close()
+            return {
+                'statusCode': 400,
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                'body': json.dumps({'error': 'Missing status'}),
+                'isBase64Encoded': False
+            }
+        cursor.execute("UPDATE orders SET status = %s WHERE id = %s", (status, item_id))
+    else:
+        conn.close()
+        return {
+            'statusCode': 400,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            'body': json.dumps({'error': 'Invalid action'}),
+            'isBase64Encoded': False
+        }
     
     conn.commit()
     cursor.close()
     conn.close()
-    
-    try:
-        recipient_email = os.environ.get('EMAIL_RECIPIENT')
-        if recipient_email:
-            msg = MIMEText(f"""Новый заказ #{order_id}
-
-Клиент: {name}
-Телефон: {phone}
-Email: {email}
-Адрес: {address}
-
-Товары:
-{json.dumps(items, ensure_ascii=False, indent=2)}
-
-Сумма: {total} ₽
-""", 'plain', 'utf-8')
-            msg['Subject'] = f'Новый заказ #{order_id}'
-            msg['From'] = 'noreply@poehali.dev'
-            msg['To'] = recipient_email
-            
-            server = smtplib.SMTP('localhost')
-            server.send_message(msg)
-            server.quit()
-    except:
-        pass
     
     return {
         'statusCode': 200,
@@ -104,8 +110,7 @@ Email: {email}
         },
         'body': json.dumps({
             'success': True,
-            'order_id': order_id,
-            'message': 'Order successfully created'
+            'message': 'Action completed successfully'
         }),
         'isBase64Encoded': False
     }

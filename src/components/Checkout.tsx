@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -27,6 +27,25 @@ export default function Checkout({ isOpen, onClose, items, total, onSuccess }: C
     deliveryMethod: 'courier',
     paymentMethod: 'card',
   });
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const addressInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (formData.address.length > 3) {
+      const timer = setTimeout(() => {
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(formData.address)}&countrycodes=ru&limit=5`)
+          .then(res => res.json())
+          .then(data => {
+            const addresses = data.map((item: any) => item.display_name);
+            setSuggestions(addresses);
+          })
+          .catch(() => setSuggestions([]));
+      }, 500);
+      return () => clearTimeout(timer);
+    } else {
+      setSuggestions([]);
+    }
+  }, [formData.address]);
 
   const deliveryPrice = 0;
   const finalTotal = total;
@@ -166,6 +185,8 @@ export default function Checkout({ isOpen, onClose, items, total, onSuccess }: C
                     value={formData.email}
                     onChange={(e) => handleInputChange('email', e.target.value)}
                     placeholder="ivan@example.com"
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                    title="Введите корректный email адрес"
                   />
                 </div>
 
@@ -173,9 +194,15 @@ export default function Checkout({ isOpen, onClose, items, total, onSuccess }: C
                   <Label htmlFor="phone">Телефон</Label>
                   <Input
                     id="phone"
+                    type="tel"
                     value={formData.phone}
-                    onChange={(e) => handleInputChange('phone', e.target.value)}
-                    placeholder="+7 (999) 123-45-67"
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^0-9+]/g, '');
+                      handleInputChange('phone', value);
+                    }}
+                    placeholder="+79991234567"
+                    pattern="\+?[0-9]{10,15}"
+                    title="Введите номер телефона (только цифры и +)"
                   />
                 </div>
               </div>
@@ -207,12 +234,32 @@ export default function Checkout({ isOpen, onClose, items, total, onSuccess }: C
 
                 <div className="space-y-2">
                   <Label htmlFor="address">Адрес</Label>
-                  <Input
-                    id="address"
-                    value={formData.address}
-                    onChange={(e) => handleInputChange('address', e.target.value)}
-                    placeholder="ул. Примерная, д. 1, кв. 10"
-                  />
+                  <div className="relative">
+                    <Input
+                      ref={addressInputRef}
+                      id="address"
+                      value={formData.address}
+                      onChange={(e) => handleInputChange('address', e.target.value)}
+                      placeholder="Начните вводить адрес..."
+                      autoComplete="off"
+                    />
+                    {suggestions.length > 0 && (
+                      <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-md shadow-lg max-h-60 overflow-auto">
+                        {suggestions.map((suggestion, index) => (
+                          <div
+                            key={index}
+                            className="px-3 py-2 cursor-pointer hover:bg-accent text-sm"
+                            onClick={() => {
+                              handleInputChange('address', suggestion);
+                              setSuggestions([]);
+                            }}
+                          >
+                            {suggestion}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             )}
@@ -223,24 +270,13 @@ export default function Checkout({ isOpen, onClose, items, total, onSuccess }: C
 
                 <div className="space-y-2">
                   <Label>Способ оплаты</Label>
-                  <RadioGroup
-                    value={formData.paymentMethod}
-                    onValueChange={(value) => handleInputChange('paymentMethod', value)}
-                  >
-                    <div className="flex items-center space-x-2 border border-border rounded p-3">
-                      <RadioGroupItem value="card" id="card" />
-                      <Label htmlFor="card" className="flex-1 cursor-pointer">
-                        <div className="font-medium">Банковская карта</div>
-                        <div className="text-sm text-muted-foreground">Visa, Mastercard, МИР</div>
-                      </Label>
+                  <div className="flex items-center space-x-2 border border-border rounded p-3">
+                    <div className="flex-1">
+                      <div className="font-medium">Банковская карта</div>
+                      <div className="text-sm text-muted-foreground">Оплата онлайн</div>
                     </div>
-                    <div className="flex items-center space-x-2 border border-border rounded p-3">
-                      <RadioGroupItem value="cash" id="cash" />
-                      <Label htmlFor="cash" className="flex-1 cursor-pointer">
-                        <div className="font-medium">Наличные при получении</div>
-                      </Label>
-                    </div>
-                  </RadioGroup>
+                    <Icon name="CreditCard" size={20} className="text-accent" />
+                  </div>
                 </div>
 
                 <Separator />

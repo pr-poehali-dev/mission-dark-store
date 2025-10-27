@@ -1,14 +1,13 @@
 import json
 import os
-import psycopg2
 from typing import Dict, Any
 
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     '''
-    Business: Get all contact messages from database
-    Args: event - dict with httpMethod
+    Business: Verify admin password for authentication
+    Args: event - dict with httpMethod, body (password)
           context - object with attributes: request_id, function_name
-    Returns: HTTP response dict with messages list
+    Returns: HTTP response dict with verification result
     '''
     method: str = event.get('httpMethod', 'GET')
     
@@ -17,7 +16,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'statusCode': 200,
             'headers': {
                 'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET, OPTIONS',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
                 'Access-Control-Allow-Headers': 'Content-Type',
                 'Access-Control-Max-Age': '86400'
             },
@@ -25,7 +24,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'isBase64Encoded': False
         }
     
-    if method != 'GET':
+    if method != 'POST':
         return {
             'statusCode': 405,
             'headers': {
@@ -36,28 +35,23 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'isBase64Encoded': False
         }
     
-    database_url = os.environ.get('DATABASE_URL')
-    conn = psycopg2.connect(database_url)
-    cursor = conn.cursor()
+    body_data = json.loads(event.get('body', '{}'))
+    password = body_data.get('password')
     
-    cursor.execute(
-        "SELECT id, name, email, message, created_at FROM contact_messages ORDER BY created_at DESC"
-    )
+    admin_password = os.environ.get('ADMIN_PASSWORD')
     
-    rows = cursor.fetchall()
-    messages = []
+    if not admin_password:
+        return {
+            'statusCode': 500,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            'body': json.dumps({'error': 'Admin password not configured'}),
+            'isBase64Encoded': False
+        }
     
-    for row in rows:
-        messages.append({
-            'id': row[0],
-            'name': row[1],
-            'email': row[2],
-            'message': row[3],
-            'created_at': row[4].isoformat() if row[4] else None
-        })
-    
-    cursor.close()
-    conn.close()
+    is_valid = password == admin_password
     
     return {
         'statusCode': 200,
@@ -65,6 +59,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*'
         },
-        'body': json.dumps({'messages': messages}),
+        'body': json.dumps({
+            'valid': is_valid,
+            'message': 'Password verified' if is_valid else 'Invalid password'
+        }),
         'isBase64Encoded': False
     }

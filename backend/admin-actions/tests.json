@@ -1,0 +1,50 @@
+{
+  "tests": [
+    {
+      "name": "Update order status",
+      "method": "POST",
+      "body": {
+        "action": "update_status",
+        "type": "order",
+        "id": 1,
+        "status": "В обработке"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "message": "string"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Delete order",
+      "method": "POST",
+      "body": {
+        "action": "delete",
+        "type": "order",
+        "id": 999
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "message": "string"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Delete message",
+      "method": "POST",
+      "body": {
+        "action": "delete",
+        "type": "message",
+        "id": 999
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "message": "string"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

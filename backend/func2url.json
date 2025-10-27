@@ -1,5 +1,6 @@
 {
-  "get-messages": "https://functions.poehali.dev/343577d6-59ef-45d3-bce4-055ee0a6d640",
+  "admin-actions": "https://functions.poehali.dev/f1b7ce7b-2c2f-4c89-a900-04a965ca2175",
+  "verify-admin": "https://functions.poehali.dev/133f03e1-973d-44e0-b151-f0c19cae7e33",
   "get-orders": "https://functions.poehali.dev/af963a7f-06b4-41da-a8ed-362903dc16bb",
   "submit-contact": "https://functions.poehali.dev/7c797ffb-43af-40c9-9b1d-2dd37fc5ec0e",
   "submit-order": "https://functions.poehali.dev/ae5e4f87-c31c-4abe-a06d-7f2cd6f34000"

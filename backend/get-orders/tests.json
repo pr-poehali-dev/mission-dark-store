@@ -1,11 +1,12 @@
 {
   "tests": [
     {
-      "name": "Get all orders",
+      "name": "Get all orders and messages",
       "method": "GET",
       "expectedStatus": 200,
       "expectedBody": {
-        "orders": "array"
+        "orders": "array",
+        "messages": "array"
       },
       "bodyMatcher": "partial"
     }

@@ -1,0 +1,17 @@
+{
+  "tests": [
+    {
+      "name": "Verify admin password",
+      "method": "POST",
+      "body": {
+        "password": "test123"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "valid": "boolean",
+        "message": "string"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

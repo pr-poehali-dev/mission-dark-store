@@ -1,6 +1,8 @@
 import json
 import os
 import psycopg2
+import smtplib
+from email.mime.text import MIMEText
 from typing import Dict, Any
 
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
@@ -65,6 +67,26 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     conn.commit()
     cursor.close()
     conn.close()
+    
+    try:
+        recipient_email = os.environ.get('EMAIL_RECIPIENT')
+        if recipient_email:
+            msg = MIMEText(f"""Новое сообщение от {name}
+
+Email: {email}
+
+Сообщение:
+{message}
+""", 'plain', 'utf-8')
+            msg['Subject'] = f'Новое сообщение от {name}'
+            msg['From'] = 'noreply@poehali.dev'
+            msg['To'] = recipient_email
+            
+            server = smtplib.SMTP('localhost')
+            server.send_message(msg)
+            server.quit()
+    except:
+        pass
     
     return {
         'statusCode': 200,

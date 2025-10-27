@@ -110,6 +110,8 @@ export default function Contact() {
                 placeholder="Email" 
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                title="Введите корректный email адрес"
                 required
               />
               <Textarea 
