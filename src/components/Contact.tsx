@@ -22,44 +22,6 @@ export default function Contact() {
                 </p>
               </div>
 
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <Icon name="Mail" size={20} className="mt-1 text-accent" />
-                  <div>
-                    <div className="font-medium">Email</div>
-                    <a
-                      href="mailto:info@missionbydark.com"
-                      className="text-muted-foreground hover:text-accent transition-colors"
-                    >
-                      info@missionbydark.com
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <Icon name="Phone" size={20} className="mt-1 text-accent" />
-                  <div>
-                    <div className="font-medium">Телефон</div>
-                    <a
-                      href="tel:+79991234567"
-                      className="text-muted-foreground hover:text-accent transition-colors"
-                    >
-                      +7 (999) 123-45-67
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <Icon name="MapPin" size={20} className="mt-1 text-accent" />
-                  <div>
-                    <div className="font-medium">Адрес</div>
-                    <p className="text-muted-foreground">
-                      Москва, ул. Примерная, 1
-                    </p>
-                  </div>
-                </div>
-              </div>
-
               <div className="flex gap-4 pt-4">
                 <a
                   href="https://www.instagram.com/missionbydark_"
@@ -85,7 +47,9 @@ export default function Contact() {
                   rel="noopener noreferrer"
                 >
                   <Button variant="outline" size="icon" className="rounded-full">
-                    <Icon name="Music" size={20} />
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+                    </svg>
                   </Button>
                 </a>
               </div>
