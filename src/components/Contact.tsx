@@ -61,15 +61,33 @@ export default function Contact() {
               </div>
 
               <div className="flex gap-4 pt-4">
-                <Button variant="outline" size="icon" className="rounded-full">
-                  <Icon name="Instagram" size={20} />
-                </Button>
-                <Button variant="outline" size="icon" className="rounded-full">
-                  <Icon name="Facebook" size={20} />
-                </Button>
-                <Button variant="outline" size="icon" className="rounded-full">
-                  <Icon name="Twitter" size={20} />
-                </Button>
+                <a
+                  href="https://www.instagram.com/missionbydark_"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="outline" size="icon" className="rounded-full">
+                    <Icon name="Instagram" size={20} />
+                  </Button>
+                </a>
+                <a
+                  href="https://t.me/MissionByDark"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="outline" size="icon" className="rounded-full">
+                    <Icon name="Send" size={20} />
+                  </Button>
+                </a>
+                <a
+                  href="https://www.tiktok.com/@missionbydark_"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="outline" size="icon" className="rounded-full">
+                    <Icon name="Music" size={20} />
+                  </Button>
+                </a>
               </div>
             </div>
 

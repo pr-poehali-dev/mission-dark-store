@@ -49,29 +49,35 @@ export default function Footer() {
             <h4 className="font-semibold">Социальные сети</h4>
             <div className="flex gap-3">
               <a
-                href="#"
+                href="https://www.instagram.com/missionbydark_"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:border-primary transition-colors"
               >
                 <Icon name="Instagram" size={18} />
               </a>
               <a
-                href="#"
+                href="https://t.me/MissionByDark"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:border-primary transition-colors"
               >
-                <Icon name="Facebook" size={18} />
+                <Icon name="Send" size={18} />
               </a>
               <a
-                href="#"
+                href="https://www.tiktok.com/@missionbydark_"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:border-primary transition-colors"
               >
-                <Icon name="Twitter" size={18} />
+                <Icon name="Music" size={18} />
               </a>
             </div>
           </div>
         </div>
 
         <div className="border-t border-border mt-12 pt-8 text-center text-sm text-muted-foreground">
-          <p>© 2024 MISSION BY DARK. Все права защищены.</p>
+          <p>© 2025 MISSION BY DARK. Все права защищены.</p>
         </div>
       </div>
     </footer>
