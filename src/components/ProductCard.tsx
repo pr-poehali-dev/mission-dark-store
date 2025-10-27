@@ -32,6 +32,9 @@ export default function ProductCard({
 }: ProductCardProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSize, setSelectedSize] = useState('');
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+  const images = product.images || [product.image];
 
   const handleAddToCart = () => {
     if (selectedSize) {
@@ -46,10 +49,48 @@ export default function ProductCard({
       <Card className="group overflow-hidden border-border bg-card hover:border-primary/50 transition-all duration-300">
         <div className="relative aspect-[3/4] overflow-hidden bg-secondary">
           <img
-            src={product.image}
+            src={images[currentImageIndex]}
             alt={product.name}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
+          
+          {images.length > 1 && (
+            <>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur hover:bg-background"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+                }}
+              >
+                <Icon name="ChevronLeft" size={20} />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur hover:bg-background"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+                }}
+              >
+                <Icon name="ChevronRight" size={20} />
+              </Button>
+              
+              <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-1">
+                {images.map((_, idx) => (
+                  <div
+                    key={idx}
+                    className={`w-1.5 h-1.5 rounded-full transition-all ${
+                      idx === currentImageIndex ? 'bg-primary w-4' : 'bg-background/50'
+                    }`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
           
           <Button
             variant="ghost"
@@ -92,10 +133,43 @@ export default function ProductCard({
           <div className="space-y-4">
             <div className="aspect-[3/4] relative overflow-hidden rounded bg-secondary">
               <img
-                src={product.image}
+                src={images[currentImageIndex]}
                 alt={product.name}
                 className="w-full h-full object-cover"
               />
+              
+              {images.length > 1 && (
+                <>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur hover:bg-background"
+                    onClick={() => setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))}
+                  >
+                    <Icon name="ChevronLeft" size={20} />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur hover:bg-background"
+                    onClick={() => setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1))}
+                  >
+                    <Icon name="ChevronRight" size={20} />
+                  </Button>
+                  
+                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1">
+                    {images.map((_, idx) => (
+                      <button
+                        key={idx}
+                        className={`w-2 h-2 rounded-full transition-all ${
+                          idx === currentImageIndex ? 'bg-primary w-6' : 'bg-background/50'
+                        }`}
+                        onClick={() => setCurrentImageIndex(idx)}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
 
             <p className="text-sm text-muted-foreground">{product.description}</p>

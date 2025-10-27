@@ -1,0 +1,22 @@
+{
+  "tests": [
+    {
+      "name": "Submit order successfully",
+      "method": "POST",
+      "body": {
+        "name": "Иван Иванов",
+        "phone": "+79991234567",
+        "email": "test@test.com",
+        "address": "Москва, ул. Тестовая, 1",
+        "items": [{"id": "1", "name": "Test Product", "quantity": 1, "price": 5000}],
+        "total": 5000
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "message": "string"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

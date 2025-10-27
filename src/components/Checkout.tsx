@@ -45,27 +45,50 @@ export default function Checkout({ isOpen, onClose, items, total, onSuccess }: C
     return true;
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (!validateStep()) return;
 
     if (step === 'info') setStep('delivery');
     else if (step === 'delivery') setStep('payment');
     else if (step === 'payment') {
-      setStep('success');
-      setTimeout(() => {
-        onSuccess();
-        onClose();
-        setStep('info');
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          city: '',
-          address: '',
-          deliveryMethod: 'courier',
-          paymentMethod: 'card',
+      const orderData = {
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email,
+        address: `${formData.city}, ${formData.address}`,
+        items: items,
+        total: finalTotal
+      };
+
+      try {
+        const response = await fetch('https://functions.poehali.dev/ae5e4f87-c31c-4abe-a06d-7f2cd6f34000', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(orderData)
         });
-      }, 3000);
+
+        if (response.ok) {
+          setStep('success');
+          setTimeout(() => {
+            onSuccess();
+            onClose();
+            setStep('info');
+            setFormData({
+              name: '',
+              email: '',
+              phone: '',
+              city: '',
+              address: '',
+              deliveryMethod: 'courier',
+              paymentMethod: 'card',
+            });
+          }, 3000);
+        }
+      } catch (error) {
+        console.error('Order submission failed:', error);
+      }
     }
   };
 

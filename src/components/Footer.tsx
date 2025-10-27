@@ -7,9 +7,6 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
             <h3 className="text-xl font-bold tracking-wider">MISSION BY DARK</h3>
-            <p className="text-sm text-muted-foreground">
-              Авангардная мода для индивидуалов
-            </p>
           </div>
 
           <div className="space-y-3">

@@ -16,6 +16,10 @@ const mockProducts: Product[] = [
     name: 'WINDBREAKER BASE IN BLACK «КАКУЛЕШИКОРЕША»',
     price: 4500,
     image: 'https://cdn.poehali.dev/files/035cfbfa-1525-469b-9300-55c518933125.png',
+    images: [
+      'https://cdn.poehali.dev/files/035cfbfa-1525-469b-9300-55c518933125.png',
+      'https://cdn.poehali.dev/files/81640857-ba19-41eb-80ea-01f20aab9eb9.png'
+    ],
     category: 'Куртки',
     description: 'Легкая ветровка из технологичной ткани с защитой от ветра и влаги. Минималистичный дизайн в фирменном стиле Mission By Dark',
     sizes: ['S', 'M', 'L', 'XL'],
@@ -24,7 +28,11 @@ const mockProducts: Product[] = [
     id: '2',
     name: 'BOMBER JACKET BASE IN BLACK «КАКУЛЕШИКОРЕША»',
     price: 4900,
-    image: 'https://cdn.poehali.dev/projects/8069f5ba-26f8-4d37-8aae-6274fa4d9ce1/files/e4311af9-76e7-4be5-9b7e-832f764de8fe.jpg',
+    image: 'https://cdn.poehali.dev/files/bea965ae-1e12-4730-9ab9-89520e1c8e35.png',
+    images: [
+      'https://cdn.poehali.dev/files/bea965ae-1e12-4730-9ab9-89520e1c8e35.png',
+      'https://cdn.poehali.dev/files/feaa756c-1975-4396-b416-be9ffd539572.png'
+    ],
     category: 'Куртки',
     description: 'Классический бомбер с современной интерпретацией. Плотная ткань, эргономичный крой, авангардная эстетика',
     sizes: ['S', 'M', 'L', 'XL'],
