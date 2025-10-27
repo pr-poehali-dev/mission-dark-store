@@ -10,6 +10,7 @@ interface CartProps {
   items: CartItem[];
   onUpdateQuantity: (id: string, size: string, quantity: number) => void;
   onRemoveItem: (id: string, size: string) => void;
+  onCheckout: () => void;
 }
 
 export default function Cart({
@@ -18,6 +19,7 @@ export default function Cart({
   items,
   onUpdateQuantity,
   onRemoveItem,
+  onCheckout,
 }: CartProps) {
   const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -110,7 +112,10 @@ export default function Cart({
                 <span>{total.toLocaleString('ru-RU')} ₽</span>
               </div>
 
-              <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-12">
+              <Button 
+                className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-12"
+                onClick={onCheckout}
+              >
                 Оформить заказ
               </Button>
             </div>

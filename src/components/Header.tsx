@@ -7,10 +7,9 @@ import { Badge } from '@/components/ui/badge';
 interface HeaderProps {
   cartCount: number;
   onCartOpen: () => void;
-  onProfileOpen: () => void;
 }
 
-export default function Header({ cartCount, onCartOpen, onProfileOpen }: HeaderProps) {
+export default function Header({ cartCount, onCartOpen }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navigation = [
@@ -43,15 +42,6 @@ export default function Header({ cartCount, onCartOpen, onProfileOpen }: HeaderP
           </div>
 
           <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onProfileOpen}
-              className="relative"
-            >
-              <Icon name="User" size={20} />
-            </Button>
-
             <Button
               variant="ghost"
               size="icon"
