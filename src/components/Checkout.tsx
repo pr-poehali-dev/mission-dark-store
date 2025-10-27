@@ -28,8 +28,8 @@ export default function Checkout({ isOpen, onClose, items, total, onSuccess }: C
     paymentMethod: 'card',
   });
 
-  const deliveryPrice = formData.deliveryMethod === 'courier' ? 500 : 0;
-  const finalTotal = total + deliveryPrice;
+  const deliveryPrice = 0;
+  const finalTotal = total;
 
   const handleInputChange = (field: string, value: string) => {
     setFormData({ ...formData, [field]: value });
@@ -162,27 +162,14 @@ export default function Checkout({ isOpen, onClose, items, total, onSuccess }: C
               <div className="space-y-4">
                 <h3 className="font-semibold text-lg">Доставка</h3>
 
-                <div className="space-y-2">
-                  <Label>Способ доставки</Label>
-                  <RadioGroup
-                    value={formData.deliveryMethod}
-                    onValueChange={(value) => handleInputChange('deliveryMethod', value)}
-                  >
-                    <div className="flex items-center space-x-2 border border-border rounded p-3">
-                      <RadioGroupItem value="courier" id="courier" />
-                      <Label htmlFor="courier" className="flex-1 cursor-pointer">
-                        <div className="font-medium">Курьерская доставка</div>
-                        <div className="text-sm text-muted-foreground">500 ₽, 1-3 дня</div>
-                      </Label>
+                <div className="p-4 border border-border rounded bg-secondary/20">
+                  <div className="flex items-center gap-2">
+                    <Icon name="Truck" size={20} className="text-accent" />
+                    <div>
+                      <div className="font-medium">Курьерская доставка</div>
+                      <div className="text-sm text-muted-foreground">Бесплатно</div>
                     </div>
-                    <div className="flex items-center space-x-2 border border-border rounded p-3">
-                      <RadioGroupItem value="pickup" id="pickup" />
-                      <Label htmlFor="pickup" className="flex-1 cursor-pointer">
-                        <div className="font-medium">Самовывоз</div>
-                        <div className="text-sm text-muted-foreground">Бесплатно</div>
-                      </Label>
-                    </div>
-                  </RadioGroup>
+                  </div>
                 </div>
 
                 <div className="space-y-2">

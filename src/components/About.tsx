@@ -9,42 +9,21 @@ export default function About() {
 
           <div className="space-y-6 text-muted-foreground leading-relaxed">
             <p className="text-lg">
-              <span className="text-foreground font-semibold">MISSION BY DARK</span> — это не просто одежда. 
-              Это философия свободы самовыражения через минимализм и качество.
+              <span className="text-foreground font-semibold">MISSION BY DARK</span> — это не просто дизайнерская одежда. 
+              Это новая страничка истории.
             </p>
 
             <p>
-              Мы создаём вещи для тех, кто не боится быть собой. Каждая коллекция — это исследование 
-              границ между классикой и авангардом, между формой и функцией.
+              Наша цель - показать всем, что большие бренды бывают не только на западе.
             </p>
 
             <p>
-              Наша миссия — доказать, что настоящий стиль не нуждается в компромиссах. 
-              Мы используем только премиальные материалы и работаем с мастерами своего дела.
+              Каждая ниточка - это часть нашей с вами работы.
             </p>
 
-            <div className="grid md:grid-cols-3 gap-8 pt-12">
-              <div className="space-y-3 text-center">
-                <div className="text-3xl font-bold text-foreground">Качество</div>
-                <p className="text-sm">
-                  Только лучшие материалы и безупречное исполнение
-                </p>
-              </div>
-
-              <div className="space-y-3 text-center">
-                <div className="text-3xl font-bold text-foreground">Минимализм</div>
-                <p className="text-sm">
-                  Ничего лишнего, только суть и функциональность
-                </p>
-              </div>
-
-              <div className="space-y-3 text-center">
-                <div className="text-3xl font-bold text-foreground">Индивидуальность</div>
-                <p className="text-sm">
-                  Каждая вещь подчёркивает уникальность владельца
-                </p>
-              </div>
-            </div>
+            <p className="text-lg font-medium text-foreground">
+              Вместе мы способны на всё!
+            </p>
           </div>
         </div>
       </div>
