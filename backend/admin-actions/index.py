@@ -81,9 +81,61 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'isBase64Encoded': False
         }
     
-    # Handle delete and update_status actions
+    # Handle delete, update_status and update_product actions
     item_type = body_data.get('type')
     item_id = body_data.get('id')
+    
+    if action == 'update_product':
+        database_url = os.environ.get('DATABASE_URL')
+        conn = psycopg2.connect(database_url)
+        cursor = conn.cursor()
+        
+        update_fields = []
+        params = []
+        
+        if 'name' in body_data:
+            update_fields.append('name = %s')
+            params.append(body_data['name'])
+        
+        if 'price' in body_data:
+            update_fields.append('price = %s')
+            params.append(body_data['price'])
+        
+        if 'description' in body_data:
+            update_fields.append('description = %s')
+            params.append(body_data['description'])
+        
+        if 'inStock' in body_data:
+            update_fields.append('in_stock = %s')
+            params.append(body_data['inStock'])
+        
+        if 'sizes' in body_data:
+            update_fields.append('sizes = %s')
+            params.append(body_data['sizes'])
+        
+        update_fields.append('updated_at = CURRENT_TIMESTAMP')
+        params.append(item_id)
+        
+        query = f'''
+            UPDATE t_p54427834_mission_dark_store.products
+            SET {', '.join(update_fields)}
+            WHERE id = %s
+        '''
+        
+        cursor.execute(query, params)
+        conn.commit()
+        cursor.close()
+        conn.close()
+        
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            'body': json.dumps({'success': True, 'message': 'Product updated'}),
+            'isBase64Encoded': False
+        }
     
     if not all([item_type, item_id]):
         return {
@@ -102,9 +154,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     
     if action == 'delete':
         if item_type == 'order':
-            cursor.execute("DELETE FROM orders WHERE id = %s", (item_id,))
+            cursor.execute("DELETE FROM t_p54427834_mission_dark_store.orders WHERE id = %s", (item_id,))
         elif item_type == 'message':
-            cursor.execute("DELETE FROM contact_messages WHERE id = %s", (item_id,))
+            cursor.execute("DELETE FROM t_p54427834_mission_dark_store.contact_messages WHERE id = %s", (item_id,))
         else:
             conn.close()
             return {
@@ -129,7 +181,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'body': json.dumps({'error': 'Missing status'}),
                 'isBase64Encoded': False
             }
-        cursor.execute("UPDATE orders SET status = %s WHERE id = %s", (status, item_id))
+        cursor.execute("UPDATE t_p54427834_mission_dark_store.orders SET status = %s WHERE id = %s", (status, item_id))
     else:
         conn.close()
         return {

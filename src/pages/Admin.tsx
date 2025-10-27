@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
+import { Product } from '@/types/product';
 import AdminLogin from '@/components/admin/AdminLogin';
 import AdminHeader from '@/components/admin/AdminHeader';
 import OrdersTable from '@/components/admin/OrdersTable';
 import MessagesList from '@/components/admin/MessagesList';
 import OrderDetailsDialog from '@/components/admin/OrderDetailsDialog';
+import ProductsManager from '@/components/admin/ProductsManager';
 
 interface Order {
   id: number;
@@ -31,6 +33,7 @@ export default function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [orders, setOrders] = useState<Order[]>([]);
   const [messages, setMessages] = useState<ContactMessage[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
@@ -51,6 +54,7 @@ export default function Admin() {
 
       setOrders(data.orders || []);
       setMessages(data.messages || []);
+      setProducts(data.products || []);
     } catch (error) {
       console.error('Failed to fetch data:', error);
       toast({
@@ -182,12 +186,15 @@ export default function Admin() {
 
       <div className="container mx-auto px-4 py-8">
         <Tabs defaultValue="orders" className="w-full">
-          <TabsList className="grid w-full max-w-md grid-cols-2">
+          <TabsList className="grid w-full max-w-2xl grid-cols-3">
             <TabsTrigger value="orders">
               Заказы ({orders.length})
             </TabsTrigger>
             <TabsTrigger value="messages">
               Сообщения ({messages.length})
+            </TabsTrigger>
+            <TabsTrigger value="products">
+              Товары ({products.length})
             </TabsTrigger>
           </TabsList>
 
@@ -204,6 +211,13 @@ export default function Admin() {
               messages={messages}
               isLoading={isLoading}
               onDeleteMessage={deleteMessage}
+            />
+          </TabsContent>
+
+          <TabsContent value="products" className="mt-6">
+            <ProductsManager
+              products={products}
+              onUpdate={fetchData}
             />
           </TabsContent>
         </Tabs>

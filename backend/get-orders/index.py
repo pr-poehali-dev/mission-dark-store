@@ -41,7 +41,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     cursor = conn.cursor()
     
     cursor.execute(
-        "SELECT id, name, phone, email, address, items, total, status, created_at FROM orders ORDER BY created_at DESC"
+        "SELECT id, name, phone, email, address, items, total, status, created_at FROM t_p54427834_mission_dark_store.orders ORDER BY created_at DESC"
     )
     
     rows = cursor.fetchall()
@@ -61,7 +61,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         })
     
     cursor.execute(
-        "SELECT id, name, email, message, created_at FROM contact_messages ORDER BY created_at DESC"
+        "SELECT id, name, email, message, created_at FROM t_p54427834_mission_dark_store.contact_messages ORDER BY created_at DESC"
     )
     
     rows = cursor.fetchall()
@@ -76,6 +76,26 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'created_at': row[4].isoformat() if row[4] else None
         })
     
+    cursor.execute(
+        "SELECT id, name, price, image, images, category, description, sizes, in_stock FROM t_p54427834_mission_dark_store.products ORDER BY created_at DESC"
+    )
+    
+    rows = cursor.fetchall()
+    products = []
+    
+    for row in rows:
+        products.append({
+            'id': row[0],
+            'name': row[1],
+            'price': row[2],
+            'image': row[3],
+            'images': row[4] if row[4] else [],
+            'category': row[5],
+            'description': row[6],
+            'sizes': row[7] if row[7] else [],
+            'inStock': row[8]
+        })
+    
     cursor.close()
     conn.close()
     
@@ -85,6 +105,6 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*'
         },
-        'body': json.dumps({'orders': orders, 'messages': messages}),
+        'body': json.dumps({'orders': orders, 'messages': messages, 'products': products}),
         'isBase64Encoded': False
     }
