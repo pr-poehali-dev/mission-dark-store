@@ -15,7 +15,7 @@ const mockProducts: Product[] = [
     id: '1',
     name: 'WINDBREAKER BASE IN BLACK «КАКУЛЕШИКОРЕША»',
     price: 4500,
-    image: 'https://cdn.poehali.dev/projects/8069f5ba-26f8-4d37-8aae-6274fa4d9ce1/files/8e0c032b-0891-4ee4-a28d-07f008e807c0.jpg',
+    image: 'https://cdn.poehali.dev/files/035cfbfa-1525-469b-9300-55c518933125.png',
     category: 'Куртки',
     description: 'Легкая ветровка из технологичной ткани с защитой от ветра и влаги. Минималистичный дизайн в фирменном стиле Mission By Dark',
     sizes: ['S', 'M', 'L', 'XL'],

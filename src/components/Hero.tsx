@@ -11,10 +11,7 @@ export default function Hero() {
             MISSION BY DARK
           </h1>
           
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto font-light">
-            Авангардная мода для тех, кто не боится выделяться. 
-            Минимализм, качество, индивидуальность.
-          </p>
+
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
             <Button
