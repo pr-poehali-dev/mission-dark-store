@@ -37,7 +37,7 @@ export default function Hero() {
 
           <div className="pt-12 grid grid-cols-3 gap-8 max-w-xl mx-auto">
             <div className="space-y-2">
-              <div className="text-3xl font-bold">2024</div>
+              <div className="text-3xl font-bold">2025</div>
               <div className="text-sm text-muted-foreground">Год основания</div>
             </div>
             <div className="space-y-2">
