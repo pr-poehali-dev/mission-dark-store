@@ -1,8 +1,6 @@
 import json
 import os
 import psycopg2
-import smtplib
-from email.mime.text import MIMEText
 from typing import Dict, Any
 
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
@@ -71,30 +69,6 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     cursor.close()
     conn.close()
     
-    try:
-        recipient_email = os.environ.get('EMAIL_RECIPIENT')
-        if recipient_email:
-            msg = MIMEText(f"""Новый заказ #{order_id}
-
-Клиент: {name}
-Телефон: {phone}
-Email: {email}
-Адрес: {address}
-
-Товары:
-{json.dumps(items, ensure_ascii=False, indent=2)}
-
-Сумма: {total} ₽
-""", 'plain', 'utf-8')
-            msg['Subject'] = f'Новый заказ #{order_id}'
-            msg['From'] = 'noreply@poehali.dev'
-            msg['To'] = recipient_email
-            
-            server = smtplib.SMTP('localhost')
-            server.send_message(msg)
-            server.quit()
-    except:
-        pass
     
     return {
         'statusCode': 200,
