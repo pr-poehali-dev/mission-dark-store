@@ -41,6 +41,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     name = body_data.get('name')
     phone = body_data.get('phone')
     email = body_data.get('email', '')
+    telegram = body_data.get('telegram', '')
     address = body_data.get('address')
     items = body_data.get('items', [])
     total = body_data.get('total', 0)
@@ -61,8 +62,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     cursor = conn.cursor()
     
     cursor.execute(
-        "INSERT INTO orders (name, phone, email, address, items, total) VALUES (%s, %s, %s, %s, %s, %s) RETURNING id",
-        (name, phone, email, address, json.dumps(items), total)
+        "INSERT INTO orders (name, phone, email, telegram, address, items, total) VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING id",
+        (name, phone, email, telegram, address, json.dumps(items), total)
     )
     order_id = cursor.fetchone()[0]
     
@@ -74,12 +75,13 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     chat_id = os.environ.get('TELEGRAM_CHAT_ID')
     
     if bot_token and chat_id:
-        items_text = '\n'.join([f"  • {item['name']} - {item['size']} (x{item['quantity']}) - {item['price']}₽" for item in items])
+        items_text = '\n'.join([f"  • {item['name']} - {item.get('size', 'N/A')} (x{item['quantity']}) - {item['price']}₽" for item in items])
+        telegram_text = f"\n💬 <b>Telegram:</b> @{telegram}" if telegram else ""
         message = f"""<b>🛍️ Новый заказ #{order_id}</b>
 
 👤 <b>Клиент:</b> {name}
 📱 <b>Телефон:</b> {phone}
-📧 <b>Email:</b> {email}
+📧 <b>Email:</b> {email}{telegram_text}
 📍 <b>Адрес:</b> {address}
 
 <b>Товары:</b>

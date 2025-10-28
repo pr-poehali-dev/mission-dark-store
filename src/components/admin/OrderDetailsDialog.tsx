@@ -19,6 +19,7 @@ interface Order {
   name: string;
   phone: string;
   email: string;
+  telegram?: string;
   address: string;
   items: any[];
   total: number;
@@ -81,6 +82,12 @@ export default function OrderDetailsDialog({
                 <div className="text-sm text-muted-foreground mb-1">Email</div>
                 <div className="font-medium">{order.email}</div>
               </div>
+              {order.telegram && (
+                <div>
+                  <div className="text-sm text-muted-foreground mb-1">Telegram</div>
+                  <div className="font-medium">@{order.telegram}</div>
+                </div>
+              )}
               <div>
                 <div className="text-sm text-muted-foreground mb-1">Дата</div>
                 <div className="font-medium">{formatDate(order.created_at)}</div>
