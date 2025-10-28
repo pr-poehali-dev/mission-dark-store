@@ -92,8 +92,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             headers={'Content-Type': 'application/json'}
         )
         urllib.request.urlopen(telegram_req)
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"Failed to send telegram notification: {e}")
     
     return {
         'statusCode': 200,
