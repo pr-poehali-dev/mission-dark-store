@@ -59,7 +59,7 @@ export default function ProductCard({
               <Button
                 variant="ghost"
                 size="icon"
-                className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur hover:bg-background"
+                className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur hover:bg-background z-10"
                 onClick={(e) => {
                   e.stopPropagation();
                   setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
@@ -70,7 +70,7 @@ export default function ProductCard({
               <Button
                 variant="ghost"
                 size="icon"
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur hover:bg-background"
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur hover:bg-background z-10"
                 onClick={(e) => {
                   e.stopPropagation();
                   setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
@@ -79,12 +79,16 @@ export default function ProductCard({
                 <Icon name="ChevronRight" size={20} />
               </Button>
               
-              <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-1">
+              <div className="absolute top-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
                 {images.map((_, idx) => (
-                  <div
+                  <button
                     key={idx}
-                    className={`w-1.5 h-1.5 rounded-full transition-all ${
-                      idx === currentImageIndex ? 'bg-primary w-4' : 'bg-background/50'
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentImageIndex(idx);
+                    }}
+                    className={`w-2 h-2 rounded-full transition-all ${
+                      idx === currentImageIndex ? 'bg-primary w-6' : 'bg-background/60'
                     }`}
                   />
                 ))}
