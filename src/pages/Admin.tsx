@@ -8,6 +8,7 @@ import OrdersTable from '@/components/admin/OrdersTable';
 import MessagesList from '@/components/admin/MessagesList';
 import OrderDetailsDialog from '@/components/admin/OrderDetailsDialog';
 import ProductsManager from '@/components/admin/ProductsManager';
+import StatisticsCards from '@/components/admin/StatisticsCards';
 
 interface Order {
   id: number;
@@ -29,11 +30,17 @@ interface ContactMessage {
   created_at: string;
 }
 
+interface Analytics {
+  page_views: number;
+  add_to_cart: number;
+}
+
 export default function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [orders, setOrders] = useState<Order[]>([]);
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
+  const [analytics, setAnalytics] = useState<Analytics | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
@@ -55,6 +62,7 @@ export default function Admin() {
       setOrders(data.orders || []);
       setMessages(data.messages || []);
       setProducts(data.products || []);
+      setAnalytics(data.analytics || { page_views: 0, add_to_cart: 0 });
     } catch (error) {
       console.error('Failed to fetch data:', error);
       toast({
@@ -211,6 +219,7 @@ export default function Admin() {
       <AdminHeader onRefresh={fetchData} onLogout={handleLogout} onTestTelegram={testTelegram} />
 
       <div className="container mx-auto px-4 py-8">
+        <StatisticsCards data={analytics} isLoading={isLoading} />
         <Tabs defaultValue="orders" className="w-full">
           <TabsList className="grid w-full max-w-2xl grid-cols-3">
             <TabsTrigger value="orders">

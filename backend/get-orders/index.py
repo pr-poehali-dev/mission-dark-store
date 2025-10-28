@@ -97,8 +97,23 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'inStock': row[8]
         })
     
+    cursor.execute(
+        "SELECT COUNT(*) FROM t_p54427834_mission_dark_store.analytics WHERE event_type = 'page_view'"
+    )
+    page_views = cursor.fetchone()[0]
+    
+    cursor.execute(
+        "SELECT COUNT(*) FROM t_p54427834_mission_dark_store.analytics WHERE event_type = 'add_to_cart'"
+    )
+    add_to_cart = cursor.fetchone()[0]
+    
     cursor.close()
     conn.close()
+    
+    analytics = {
+        'page_views': page_views,
+        'add_to_cart': add_to_cart
+    }
     
     return {
         'statusCode': 200,
@@ -106,6 +121,11 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*'
         },
-        'body': json.dumps({'orders': orders, 'messages': messages, 'products': products}),
+        'body': json.dumps({
+            'orders': orders,
+            'messages': messages,
+            'products': products,
+            'analytics': analytics
+        }),
         'isBase64Encoded': False
     }
