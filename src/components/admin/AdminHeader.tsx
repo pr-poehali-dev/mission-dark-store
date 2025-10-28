@@ -5,9 +5,10 @@ import { useNavigate } from 'react-router-dom';
 interface AdminHeaderProps {
   onRefresh: () => void;
   onLogout: () => void;
+  onTestTelegram: () => void;
 }
 
-export default function AdminHeader({ onRefresh, onLogout }: AdminHeaderProps) {
+export default function AdminHeader({ onRefresh, onLogout, onTestTelegram }: AdminHeaderProps) {
   const navigate = useNavigate();
 
   return (
@@ -25,6 +26,10 @@ export default function AdminHeader({ onRefresh, onLogout }: AdminHeaderProps) {
             <h1 className="text-2xl font-bold">Админ-панель</h1>
           </div>
           <div className="flex gap-2">
+            <Button onClick={onTestTelegram} variant="outline" size="sm">
+              <Icon name="Send" size={16} className="mr-2" />
+              Тест Telegram
+            </Button>
             <Button onClick={onRefresh} variant="outline" size="sm">
               <Icon name="RefreshCw" size={16} className="mr-2" />
               Обновить

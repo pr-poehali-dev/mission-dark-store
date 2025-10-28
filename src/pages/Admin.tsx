@@ -176,13 +176,39 @@ export default function Admin() {
     fetchData();
   };
 
+  const testTelegram = async () => {
+    try {
+      const response = await fetch('https://functions.poehali.dev/634f3cea-2066-436e-b092-ae749813c514');
+      const data = await response.json();
+
+      if (data.success) {
+        toast({
+          title: 'Успешно',
+          description: 'Тестовое сообщение отправлено в Telegram'
+        });
+      } else {
+        toast({
+          title: 'Ошибка',
+          description: data.error || 'Не удалось отправить сообщение',
+          variant: 'destructive'
+        });
+      }
+    } catch (error) {
+      toast({
+        title: 'Ошибка',
+        description: 'Проверьте настройки бота и chat ID',
+        variant: 'destructive'
+      });
+    }
+  };
+
   if (!isAuthenticated) {
     return <AdminLogin onLoginSuccess={handleLoginSuccess} />;
   }
 
   return (
     <div className="min-h-screen bg-background">
-      <AdminHeader onRefresh={fetchData} onLogout={handleLogout} />
+      <AdminHeader onRefresh={fetchData} onLogout={handleLogout} onTestTelegram={testTelegram} />
 
       <div className="container mx-auto px-4 py-8">
         <Tabs defaultValue="orders" className="w-full">
