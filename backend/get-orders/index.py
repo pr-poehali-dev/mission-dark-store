@@ -41,7 +41,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     cursor = conn.cursor()
     
     cursor.execute(
-        "SELECT id, name, phone, email, address, items, total, status, created_at FROM t_p54427834_mission_dark_store.orders ORDER BY created_at DESC"
+        "SELECT id, name, phone, email, telegram, address, items, total, status, created_at FROM t_p54427834_mission_dark_store.orders ORDER BY created_at DESC"
     )
     
     rows = cursor.fetchall()
@@ -53,11 +53,12 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'name': row[1],
             'phone': row[2],
             'email': row[3],
-            'address': row[4],
-            'items': row[5],
-            'total': row[6],
-            'status': row[7],
-            'created_at': row[8].isoformat() if row[8] else None
+            'telegram': row[4],
+            'address': row[5],
+            'items': row[6],
+            'total': row[7],
+            'status': row[8],
+            'created_at': row[9].isoformat() if row[9] else None
         })
     
     cursor.execute(

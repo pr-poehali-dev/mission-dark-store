@@ -133,7 +133,7 @@ export default function Checkout({ isOpen, onClose, items, total, onSuccess }: C
             </div>
             <h3 className="text-2xl font-semibold">Заказ оформлен!</h3>
             <p className="text-muted-foreground text-center">
-              Мы отправили подтверждение на {formData.email}
+              Мы скоро с вами свяжемся
             </p>
           </div>
         ) : (
