@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
+import { useToast } from '@/hooks/use-toast';
 
 interface Order {
   id: number;
@@ -40,6 +41,8 @@ export default function OrderDetailsDialog({
   onUpdateStatus,
   onDelete
 }: OrderDetailsDialogProps) {
+  const { toast } = useToast();
+  
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString('ru-RU', {
       year: 'numeric',
@@ -50,20 +53,68 @@ export default function OrderDetailsDialog({
     });
   };
 
+  const copyOrderData = () => {
+    if (!order) return;
+    
+    const itemsList = order.items.map((item, idx) => 
+      `${idx + 1}. ${item.name}${item.size ? ` (${item.size})` : ''} - ${item.quantity} шт. - ${(item.price * item.quantity).toLocaleString('ru-RU')} ₽`
+    ).join('\n');
+    
+    const orderText = `Заказ #${order.id}
+
+Клиент: ${order.name}
+Телефон: ${order.phone}
+Email: ${order.email}${order.telegram ? `\nTelegram: @${order.telegram}` : ''}
+
+Адрес доставки:
+${order.address}
+
+Товары:
+${itemsList}
+
+Итого: ${order.total.toLocaleString('ru-RU')} ₽
+
+Дата: ${formatDate(order.created_at)}
+Статус: ${order.status === 'new' ? 'Новый' : order.status === 'processing' ? 'В обработке' : 'Выполнен'}`;
+    
+    navigator.clipboard.writeText(orderText).then(() => {
+      toast({
+        title: 'Скопировано',
+        description: 'Данные заказа скопированы в буфер обмена'
+      });
+    }).catch(() => {
+      toast({
+        title: 'Ошибка',
+        description: 'Не удалось скопировать данные',
+        variant: 'destructive'
+      });
+    });
+  };
+
   return (
     <Dialog open={!!order} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
             <span>Заказ #{order?.id}</span>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => order && onDelete(order.id)}
-            >
-              <Icon name="Trash2" size={16} className="mr-2" />
-              Удалить
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={copyOrderData}
+              >
+                <Icon name="Copy" size={16} className="mr-2" />
+                Скопировать
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => order && onDelete(order.id)}
+              >
+                <Icon name="Trash2" size={16} className="mr-2" />
+                Удалить
+              </Button>
+            </div>
           </DialogTitle>
         </DialogHeader>
 
