@@ -113,6 +113,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             update_fields.append('sizes = %s')
             params.append(body_data['sizes'])
         
+        if 'image' in body_data:
+            update_fields.append('image = %s')
+            params.append(body_data['image'])
+        
         update_fields.append('updated_at = CURRENT_TIMESTAMP')
         params.append(item_id)
         

@@ -1,6 +1,7 @@
 import json
 import os
 import psycopg2
+import urllib.request
 from typing import Dict, Any
 
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
@@ -69,6 +70,38 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     cursor.close()
     conn.close()
     
+    bot_token = os.environ.get('TELEGRAM_BOT_TOKEN')
+    chat_id = os.environ.get('TELEGRAM_CHAT_ID')
+    
+    if bot_token and chat_id:
+        items_text = '\n'.join([f"  • {item['name']} - {item['size']} (x{item['quantity']}) - {item['price']}₽" for item in items])
+        message = f"""<b>🛍️ Новый заказ #{order_id}</b>
+
+👤 <b>Клиент:</b> {name}
+📱 <b>Телефон:</b> {phone}
+📧 <b>Email:</b> {email}
+📍 <b>Адрес:</b> {address}
+
+<b>Товары:</b>
+{items_text}
+
+💰 <b>Итого:</b> {total}₽"""
+        
+        try:
+            url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+            data = {
+                'chat_id': chat_id,
+                'text': message,
+                'parse_mode': 'HTML'
+            }
+            req = urllib.request.Request(
+                url,
+                data=json.dumps(data).encode('utf-8'),
+                headers={'Content-Type': 'application/json'}
+            )
+            urllib.request.urlopen(req)
+        except Exception:
+            pass
     
     return {
         'statusCode': 200,

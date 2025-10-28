@@ -2,6 +2,7 @@ import json
 import os
 import psycopg2
 import smtplib
+import urllib.request
 from email.mime.text import MIMEText
 from typing import Dict, Any
 
@@ -87,6 +88,34 @@ Email: {email}
             server.quit()
     except:
         pass
+    
+    bot_token = os.environ.get('TELEGRAM_BOT_TOKEN')
+    chat_id = os.environ.get('TELEGRAM_CHAT_ID')
+    
+    if bot_token and chat_id:
+        telegram_message = f"""<b>💬 Новое сообщение #{message_id}</b>
+
+👤 <b>Имя:</b> {name}
+📧 <b>Email:</b> {email}
+
+<b>Сообщение:</b>
+{message}"""
+        
+        try:
+            url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+            data = {
+                'chat_id': chat_id,
+                'text': telegram_message,
+                'parse_mode': 'HTML'
+            }
+            req = urllib.request.Request(
+                url,
+                data=json.dumps(data).encode('utf-8'),
+                headers={'Content-Type': 'application/json'}
+            )
+            urllib.request.urlopen(req)
+        except Exception:
+            pass
     
     return {
         'statusCode': 200,

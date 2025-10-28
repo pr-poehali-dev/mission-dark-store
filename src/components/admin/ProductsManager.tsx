@@ -26,8 +26,29 @@ export default function ProductsManager({ products, onUpdate }: ProductsManagerP
       price: product.price,
       description: product.description,
       sizes: product.sizes,
+      image: product.image,
       inStock: product.inStock !== false
     });
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: 'Ошибка',
+        description: 'Файл слишком большой (макс. 5МБ)',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFormData({ ...formData, image: reader.result as string });
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSave = async () => {
@@ -96,6 +117,20 @@ export default function ProductsManager({ products, onUpdate }: ProductsManagerP
           <CardContent>
             {editingProduct?.id === product.id ? (
               <div className="space-y-4">
+                <div>
+                  <Label>Главное фото</Label>
+                  <div className="space-y-2">
+                    {formData.image && (
+                      <img src={formData.image} alt="Preview" className="w-full h-48 object-cover rounded-md" />
+                    )}
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                    />
+                    <p className="text-xs text-muted-foreground">Макс. размер: 5МБ. Форматы: JPG, PNG, WebP</p>
+                  </div>
+                </div>
                 <div>
                   <Label>Название</Label>
                   <Input
