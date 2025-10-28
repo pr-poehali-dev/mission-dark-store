@@ -186,7 +186,7 @@ export default function Admin() {
 
   const testTelegram = async () => {
     try {
-      const response = await fetch('https://functions.poehali.dev/634f3cea-2066-436e-b092-ae749813c514');
+      const response = await fetch('https://functions.poehali.dev/0e6b6337-025c-497b-be1b-06db7d51d141');
       const data = await response.json();
 
       if (data.success) {

@@ -71,39 +71,29 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     cursor.close()
     conn.close()
     
-    bot_token = os.environ.get('TELEGRAM_BOT_TOKEN')
-    chat_id = os.environ.get('TELEGRAM_CHAT_ID')
-    
-    if bot_token and chat_id:
-        items_text = '\n'.join([f"  • {item['name']} - {item.get('size', 'N/A')} (x{item['quantity']}) - {item['price']}₽" for item in items])
-        telegram_text = f"\n💬 <b>Telegram:</b> @{telegram}" if telegram else ""
-        message = f"""<b>🛍️ Новый заказ #{order_id}</b>
-
-👤 <b>Клиент:</b> {name}
-📱 <b>Телефон:</b> {phone}
-📧 <b>Email:</b> {email}{telegram_text}
-📍 <b>Адрес:</b> {address}
-
-<b>Товары:</b>
-{items_text}
-
-💰 <b>Итого:</b> {total}₽"""
-        
-        try:
-            url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-            data = {
-                'chat_id': chat_id,
-                'text': message,
-                'parse_mode': 'HTML'
+    try:
+        telegram_url = 'https://functions.poehali.dev/0e6b6337-025c-497b-be1b-06db7d51d141'
+        telegram_data = {
+            'type': 'order',
+            'order': {
+                'id': order_id,
+                'name': name,
+                'phone': phone,
+                'email': email,
+                'telegram': telegram,
+                'address': address,
+                'items': items,
+                'total': total
             }
-            req = urllib.request.Request(
-                url,
-                data=json.dumps(data).encode('utf-8'),
-                headers={'Content-Type': 'application/json'}
-            )
-            urllib.request.urlopen(req)
-        except Exception:
-            pass
+        }
+        telegram_req = urllib.request.Request(
+            telegram_url,
+            data=json.dumps(telegram_data).encode('utf-8'),
+            headers={'Content-Type': 'application/json'}
+        )
+        urllib.request.urlopen(telegram_req)
+    except Exception:
+        pass
     
     return {
         'statusCode': 200,
