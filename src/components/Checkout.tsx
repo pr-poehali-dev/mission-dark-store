@@ -22,6 +22,7 @@ export default function Checkout({ isOpen, onClose, items, total, onSuccess }: C
     name: '',
     email: '',
     phone: '',
+    telegram: '',
     city: '',
     address: '',
     deliveryMethod: 'courier',
@@ -56,7 +57,7 @@ export default function Checkout({ isOpen, onClose, items, total, onSuccess }: C
 
   const validateStep = () => {
     if (step === 'info') {
-      return formData.name && formData.email && formData.phone;
+      return formData.name && formData.email && formData.phone && formData.telegram;
     }
     if (step === 'delivery') {
       return formData.city && formData.address;
@@ -74,6 +75,7 @@ export default function Checkout({ isOpen, onClose, items, total, onSuccess }: C
         name: formData.name,
         phone: formData.phone,
         email: formData.email,
+        telegram: formData.telegram,
         address: `${formData.city}, ${formData.address}`,
         items: items,
         total: finalTotal
@@ -98,6 +100,7 @@ export default function Checkout({ isOpen, onClose, items, total, onSuccess }: C
               name: '',
               email: '',
               phone: '',
+              telegram: '',
               city: '',
               address: '',
               deliveryMethod: 'courier',
@@ -203,6 +206,21 @@ export default function Checkout({ isOpen, onClose, items, total, onSuccess }: C
                     placeholder="+79991234567"
                     pattern="\+?[0-9]{10,15}"
                     title="Введите номер телефона (только цифры и +)"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="telegram">Telegram</Label>
+                  <Input
+                    id="telegram"
+                    value={formData.telegram}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^a-zA-Z0-9_]/g, '');
+                      handleInputChange('telegram', value);
+                    }}
+                    placeholder="username"
+                    pattern="[a-zA-Z0-9_]{5,32}"
+                    title="Введите юзернейм Telegram (без @)"
                   />
                 </div>
               </div>
