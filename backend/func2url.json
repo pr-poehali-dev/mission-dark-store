@@ -1,5 +1,5 @@
 {
-  "create-payment": "https://functions.poehali.dev/a9eb11ae-ac93-4bca-bbaf-373bc3fbe876",
+  "test-telegram": "https://functions.poehali.dev/634f3cea-2066-436e-b092-ae749813c514",
   "admin-actions": "https://functions.poehali.dev/f1b7ce7b-2c2f-4c89-a900-04a965ca2175",
   "get-orders": "https://functions.poehali.dev/af963a7f-06b4-41da-a8ed-362903dc16bb",
   "submit-contact": "https://functions.poehali.dev/7c797ffb-43af-40c9-9b1d-2dd37fc5ec0e",
