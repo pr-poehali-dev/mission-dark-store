@@ -139,7 +139,7 @@ export default function Checkout({ isOpen, onClose, items, total, onSuccess }: C
               <p className="text-sm text-muted-foreground text-center">
                 Если вы ввели неверные данные, всегда можете обратиться в поддержку нашего{' '}
                 <a 
-                  href="https://t.me/+QgiLIa1gFRY4Y2Iy" 
+                  href="https://t.me/MISSIONBYDARK" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-primary hover:underline font-medium"

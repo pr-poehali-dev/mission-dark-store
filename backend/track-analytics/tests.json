@@ -1,0 +1,36 @@
+{
+  "tests": [
+    {
+      "name": "Track page view event",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "event_type": "page_view",
+        "event_data": {
+          "page": "/catalog"
+        }
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Track add to cart event",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "event_type": "add_to_cart",
+        "event_data": {
+          "product_id": "test-product"
+        }
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

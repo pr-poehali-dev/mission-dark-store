@@ -24,6 +24,21 @@ export default function Index() {
   const { toast } = useToast();
 
   useEffect(() => {
+    const trackPageView = async () => {
+      try {
+        await fetch('https://functions.poehali.dev/c6e2bd06-d47b-4b91-844f-57e0cfe14b09', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            event_type: 'page_view',
+            event_data: { page: window.location.pathname }
+          })
+        });
+      } catch (error) {
+        console.error('Failed to track page view:', error);
+      }
+    };
+    
     const fetchProducts = async () => {
       try {
         const response = await fetch('https://functions.poehali.dev/af963a7f-06b4-41da-a8ed-362903dc16bb');
@@ -37,10 +52,28 @@ export default function Index() {
       }
     };
     
+    trackPageView();
     fetchProducts();
   }, []);
 
   const handleAddToCart = (product: Product, size: string) => {
+    const trackAddToCart = async () => {
+      try {
+        await fetch('https://functions.poehali.dev/c6e2bd06-d47b-4b91-844f-57e0cfe14b09', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            event_type: 'add_to_cart',
+            event_data: { product_id: product.id, product_name: product.name }
+          })
+        });
+      } catch (error) {
+        console.error('Failed to track add to cart:', error);
+      }
+    };
+    
+    trackAddToCart();
+    
     const existingItem = cartItems.find(
       (item) => item.id === product.id && item.size === size
     );
