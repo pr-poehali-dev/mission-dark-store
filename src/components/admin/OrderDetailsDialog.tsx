@@ -52,7 +52,7 @@ export default function OrderDetailsDialog({
 
   return (
     <Dialog open={!!order} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
             <span>Заказ #{order?.id}</span>
@@ -69,25 +69,31 @@ export default function OrderDetailsDialog({
 
         {order && (
           <div className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <div className="text-sm text-muted-foreground mb-1">Клиент</div>
-                <div className="font-medium">{order.name}</div>
-              </div>
-              <div>
-                <div className="text-sm text-muted-foreground mb-1">Телефон</div>
-                <div className="font-medium">{order.phone}</div>
-              </div>
-              <div>
-                <div className="text-sm text-muted-foreground mb-1">Email</div>
-                <div className="font-medium">{order.email}</div>
-              </div>
-              {order.telegram && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <div className="text-sm text-muted-foreground mb-1">Telegram</div>
-                  <div className="font-medium">@{order.telegram}</div>
+                  <div className="text-sm text-muted-foreground mb-1">Клиент</div>
+                  <div className="font-medium">{order.name}</div>
                 </div>
-              )}
+                <div>
+                  <div className="text-sm text-muted-foreground mb-1">Телефон</div>
+                  <div className="font-medium">{order.phone}</div>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-sm text-muted-foreground mb-1">Email</div>
+                  <div className="font-medium break-all">{order.email}</div>
+                </div>
+                {order.telegram && (
+                  <div>
+                    <div className="text-sm text-muted-foreground mb-1">Telegram</div>
+                    <div className="font-medium">@{order.telegram}</div>
+                  </div>
+                )}
+              </div>
+              
               <div>
                 <div className="text-sm text-muted-foreground mb-1">Дата</div>
                 <div className="font-medium">{formatDate(order.created_at)}</div>

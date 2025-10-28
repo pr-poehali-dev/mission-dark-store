@@ -135,6 +135,19 @@ export default function Checkout({ isOpen, onClose, items, total, onSuccess }: C
             <p className="text-muted-foreground text-center">
               Мы скоро с вами свяжемся
             </p>
+            <div className="mt-4 p-4 bg-secondary/50 rounded-lg border border-border max-w-md">
+              <p className="text-sm text-muted-foreground text-center">
+                Если вы ввели неверные данные, всегда можете обратиться в поддержку нашего{' '}
+                <a 
+                  href="https://t.me/+QgiLIa1gFRY4Y2Iy" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-primary hover:underline font-medium"
+                >
+                  Telegram-канала
+                </a>
+              </p>
+            </div>
           </div>
         ) : (
           <>
